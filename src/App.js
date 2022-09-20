@@ -1,64 +1,26 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import Movie from "./components/Movie";
+import React from "react";
 import "./App.css";
+import Home from "./routes/Home";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Movie from "./components/Movie";
+import Nav from "./components/Nav";
+import Movies from "./routes/Movies";
+import MovieDetails from "./routes/MovieDetails";
 
 function App(props) {
-  const [loading, setLoading] = useState(true);
-  const [movies, setMovies] = useState([]);
-
-  async function getMovieAPI() {
-    if (0 < movies.length) return;
-
-    const result = await axios.get(
-      "https://api.themoviedb.org/3/movie/popular?api_key=fcecf39d28dea79f3b8e656e71ed7ffb&language=ko"
-    );
-    console.log(result.data.results);
-    setMovies(result.data.results);
-    setLoading(false);
-  }
-
-  useEffect(function () {
-    getMovieAPI();
-  }, []);
-
   return (
-    <>
-      {loading ? (
-        <div>로딩중...</div>
-      ) : (
-        movies.map(function (ele) {
-          return (
-            <Movie
-              key={ele.id}
-              id={ele.id}
-              title={ele.title}
-              poster_path={ele.poster_path}
-              overview={ele.overview}
-              vote_average={ele.vote_average}
-              adult={ele.adult}
-              original_language={ele.original_language}
-              release_date={ele.release_date}
-            />
-          );
-        })
-      )}
-    </>
+    <BrowserRouter>
+      <Nav />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/top_rated" element={<Movies title={"최고평점"} />} />
+        <Route path="/popular" element={<Movies title={"인기영화"} />} />
+        <Route path="/now_playing" element={<Movies title={"상영중"} />} />
+        <Route path="/upcoming" element={<Movies title={"개봉예정"} />} />
+        <Route path="/details/:id" element={<MovieDetails />} />
+      </Routes>
+    </BrowserRouter>
   );
-
-  // return (
-  //   <>
-  //     {loading ? (
-  //       <div>로딩중...</div>
-  //     ) : (
-  //       <>
-  //         {movies.map(function (ele, idx) {
-  //           return <Movie title={ele.title} />;
-  //         })}
-  //       </>
-  //     )}
-  //   </>
-  // );
 }
 
 export default App;

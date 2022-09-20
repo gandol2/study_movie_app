@@ -9,7 +9,7 @@ function Movie(props) {
           className="movie__poster_img"
           width={100}
           src={`https://image.tmdb.org/t/p/original${props.poster_path}`}
-        ></img>
+        />
         <div className="movie__adult">{!props.adult ? "19" : null}</div>
       </div>
 
